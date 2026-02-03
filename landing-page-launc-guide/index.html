@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Deployment Guide | Unicorn Marketers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #3B9FD8;
+            --primary-blue-dark: #2878A8;
+            --primary-blue-light: #5BB5E8;
+            --accent-cyan: #00C4E8;
+            --accent-gradient: linear-gradient(135deg, #3B9FD8 0%, #00C4E8 100%);
+            --dark-bg: #0f1419;
+            --dark-surface: #1a2634;
+            --dark-card: #243342;
+            --dark-card-hover: #2d3e4f;
+            --dark-border: rgba(59, 159, 216, 0.2);
+            --text-white: #ffffff;
+            --text-gray: #9ca3af;
+            --text-muted: #6b7280;
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.3);
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --glow-blue: 0 0 40px rgba(59, 159, 216, 0.3);
+            --glow-cyan: 0 0 40px rgba(0, 196, 232, 0.3);
+            --glass-bg: rgba(26, 38, 52, 0.8);
+            --glass-border: rgba(59, 159, 216, 0.15);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-gradient-1 {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(59, 159, 216, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: float 20s ease-in-out infinite;
+        }
+        .bg-gradient-2 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 196, 232, 0.1) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+        .grid-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(59, 159, 216, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 159, 216, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.05); }
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+        .header { text-align: center; padding: 50px 20px 40px; }
+        .logo-container { margin-bottom: 30px; }
+        .logo { height: 50px; filter: drop-shadow(0 4px 20px rgba(59, 159, 216, 0.3)); }
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .header-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #3B9FD8 50%, #00C4E8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        .header p { font-size: 1.2rem; color: var(--text-gray); max-width: 500px; margin: 0 auto; }
+        .main-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            box-shadow: var(--glow-blue);
+        }
+        .progress-section {
+            background: linear-gradient(180deg, rgba(59, 159, 216, 0.1) 0%, transparent 100%);
+            padding: 30px;
+            border-bottom: 1px solid var(--dark-border);
+        }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .progress-label { display: flex; align-items: center; gap: 10px; }
+        .progress-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .progress-text h3 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
+        .progress-text span { font-size: 0.85rem; color: var(--text-gray); }
+        .progress-percent {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .progress-bar-container { background: var(--dark-card); border-radius: 10px; height: 12px; overflow: hidden; position: relative; }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        .step-indicators { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--dark-card);
+            border: 2px solid var(--dark-border);
+            transition: all 0.3s ease;
+        }
+        .step-dot.active { background: var(--primary-blue); border-color: var(--primary-blue); box-shadow: 0 0 10px var(--primary-blue); }
+        .step-dot.completed { background: var(--success); border-color: var(--success); }
+        .path-selection { padding: 40px; }
+        .section-header { text-align: center; margin-bottom: 30px; }
+        .section-header h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; }
+        .section-header p { color: var(--text-gray); }
+        .path-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        @media (max-width: 700px) { .path-grid { grid-template-columns: 1fr; } .header h1 { font-size: 2rem; } }
+        .path-card {
+            background: var(--dark-card);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .path-card:hover { border-color: var(--primary-blue); transform: translateY(-4px); box-shadow: var(--glow-blue); }
+        .path-card.selected { border-color: var(--accent-cyan); background: linear-gradient(135deg, rgba(59, 159, 216, 0.15) 0%, rgba(0, 196, 232, 0.1) 100%); }
+        .path-card-content { position: relative; z-index: 1; }
+        .path-icon-container {
+            width: 70px;
+            height: 70px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            box-shadow: var(--glow-cyan);
+        }
+        .path-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; }
+        .path-card p { color: var(--text-gray); font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; }
+        .path-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; }
+        .tag-recommended { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .tag-advanced { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .selected-check {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+        .path-card.selected .selected-check { opacity: 1; transform: scale(1); }
+        .content-area { padding: 0 40px 40px; }
+        .path-content { display: none; animation: fadeIn 0.5s ease; }
+        .path-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .info-banner {
+            background: linear-gradient(135deg, rgba(59, 159, 216, 0.15) 0%, rgba(0, 196, 232, 0.1) 100%);
+            border: 1px solid var(--dark-border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .info-banner-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .info-banner h4 { font-weight: 600; margin-bottom: 6px; color: var(--accent-cyan); }
+        .info-banner p { color: var(--text-gray); font-size: 0.95rem; line-height: 1.6; }
+        .step-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .step-card:hover { border-color: var(--primary-blue); }
+        .step-card.completed { border-color: var(--success); background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, var(--dark-card) 100%); }
+        .step-card.active { border-color: var(--accent-cyan); box-shadow: var(--glow-cyan); }
+        .step-header { padding: 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: background 0.2s ease; }
+        .step-header:hover { background: rgba(255, 255, 255, 0.02); }
+        .step-number-badge {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .step-card.completed .step-number-badge { background: var(--success); }
+        .step-info { flex: 1; }
+        .step-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; }
+        .step-subtitle { color: var(--text-gray); font-size: 0.9rem; }
+        .step-meta { display: flex; align-items: center; gap: 16px; }
+        .time-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--dark-surface);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+        .step-toggle {
+            width: 32px;
+            height: 32px;
+            background: var(--dark-surface);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .step-toggle svg { width: 16px; height: 16px; stroke: var(--text-gray); transition: transform 0.3s ease; }
+        .step-card.open .step-toggle svg { transform: rotate(180deg); }
+        .step-content { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .step-card.open .step-content { max-height: 5000px; }
+        .step-inner { padding: 0 24px 24px; }
+        .platform-tabs { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+        .platform-tab {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: var(--dark-surface);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .platform-tab:hover { border-color: var(--primary-blue); }
+        .platform-tab.active { background: var(--accent-gradient); border-color: transparent; }
+        .platform-tab-icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .platform-content { display: none; animation: fadeIn 0.4s ease; }
+        .platform-content.active { display: block; }
+        .instruction-block {
+            background: var(--dark-surface);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-blue);
+        }
+        .instruction-block h4 { display: flex; align-items: center; gap: 10px; font-weight: 600; margin-bottom: 16px; color: var(--accent-cyan); }
+        .instruction-block ol, .instruction-block ul { margin-left: 20px; color: var(--text-gray); }
+        .instruction-block li { margin-bottom: 12px; line-height: 1.7; }
+        .instruction-block li strong { color: var(--text-white); }
+        .instruction-block code {
+            background: var(--dark-card);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+            color: var(--accent-cyan);
+        }
+        .visual-mockup { background: var(--dark-bg); border-radius: 16px; overflow: hidden; margin: 24px 0; border: 1px solid var(--dark-border); }
+        .mockup-browser-bar {
+            background: var(--dark-surface);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--dark-border);
+        }
+        .mockup-dots { display: flex; gap: 8px; }
+        .mockup-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .mockup-dot.red { background: #ff5f56; }
+        .mockup-dot.yellow { background: #ffbd2e; }
+        .mockup-dot.green { background: #27ca3f; }
+        .mockup-url { flex: 1; background: var(--dark-card); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; color: var(--text-gray); font-family: monospace; }
+        .mockup-content { padding: 30px; }
+        .mockup-dropzone {
+            border: 3px dashed var(--primary-blue);
+            border-radius: 16px;
+            padding: 50px 30px;
+            text-align: center;
+            background: rgba(59, 159, 216, 0.05);
+            transition: all 0.3s ease;
+        }
+        .mockup-dropzone:hover { background: rgba(59, 159, 216, 0.1); border-color: var(--accent-cyan); }
+        .dropzone-icon { font-size: 4rem; margin-bottom: 16px; }
+        .dropzone-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+        .dropzone-subtext { color: var(--text-gray); font-size: 0.9rem; }
+        .click-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 16px;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+        .alert { padding: 20px; border-radius: 14px; margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+        .alert-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .alert-content { flex: 1; }
+        .alert-content strong { display: block; margin-bottom: 4px; }
+        .alert-info { background: rgba(59, 159, 216, 0.1); border: 1px solid rgba(59, 159, 216, 0.3); }
+        .alert-info .alert-icon { background: var(--primary-blue); }
+        .alert-success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .alert-success .alert-icon { background: var(--success); }
+        .alert-warning { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .alert-warning .alert-icon { background: var(--warning); }
+        .checklist { background: var(--dark-surface); border-radius: 16px; padding: 24px; margin: 24px 0; }
+        .checklist h4 { display: flex; align-items: center; gap: 10px; font-weight: 600; margin-bottom: 20px; color: var(--success); }
+        .checklist-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--dark-border); transition: all 0.3s ease; }
+        .checklist-item:last-child { border-bottom: none; }
+        .custom-checkbox { position: relative; width: 24px; height: 24px; flex-shrink: 0; }
+        .custom-checkbox input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; z-index: 1; }
+        .checkbox-visual {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--dark-border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: var(--dark-card);
+        }
+        .checkbox-visual svg { width: 14px; height: 14px; stroke: white; opacity: 0; transform: scale(0); transition: all 0.2s ease; }
+        .custom-checkbox input:checked + .checkbox-visual { background: var(--success); border-color: var(--success); }
+        .custom-checkbox input:checked + .checkbox-visual svg { opacity: 1; transform: scale(1); }
+        .checklist-item label { cursor: pointer; color: var(--text-gray); line-height: 1.5; transition: all 0.3s ease; padding-top: 2px; }
+        .checklist-item:has(input:checked) label { color: var(--text-muted); text-decoration: line-through; }
+        .copy-box {
+            background: var(--dark-bg);
+            border: 1px solid var(--dark-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .copy-box code { flex: 1; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.9rem; color: var(--accent-cyan); word-break: break-all; }
+        .copy-btn {
+            background: var(--accent-gradient);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .copy-btn:hover { transform: scale(1.05); box-shadow: var(--glow-cyan); }
+        .copy-btn.copied { background: var(--success); }
+        .message-template {
+            background: linear-gradient(135deg, rgba(59, 159, 216, 0.1) 0%, rgba(0, 196, 232, 0.05) 100%);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 24px 0;
+        }
+        .message-template-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--dark-border); }
+        .message-template-header span { font-size: 1.5rem; }
+        .message-template-header h4 { font-weight: 600; color: var(--accent-cyan); }
+        .message-content { background: var(--dark-surface); border-radius: 16px; padding: 24px; color: var(--text-gray); line-height: 1.8; }
+        .message-content p { margin-bottom: 16px; }
+        .dns-table { width: 100%; border-collapse: collapse; margin: 16px 0; border-radius: 12px; overflow: hidden; }
+        .dns-table th, .dns-table td { padding: 16px; text-align: left; }
+        .dns-table th { background: var(--primary-blue); color: white; font-weight: 600; }
+        .dns-table td { background: var(--dark-card); font-family: 'Monaco', 'Menlo', monospace; font-size: 0.9rem; border-bottom: 1px solid var(--dark-border); }
+        .dns-table tr:last-child td { border-bottom: none; }
+        .complete-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .complete-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--glow-cyan); }
+        .complete-btn:disabled { background: var(--dark-surface); color: var(--text-muted); cursor: not-allowed; }
+        .troubleshoot-section { background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 20px; margin-top: 30px; overflow: hidden; }
+        .troubleshoot-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: background 0.2s ease; }
+        .troubleshoot-header:hover { background: rgba(255, 255, 255, 0.02); }
+        .troubleshoot-header h3 { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+        .troubleshoot-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .troubleshoot-section.open .troubleshoot-content { max-height: 8000px; }
+        .troubleshoot-inner { padding: 0 24px 24px; }
+        .troubleshoot-categories { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--dark-border); }
+        .category-tab {
+            padding: 10px 16px;
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .category-tab:hover { border-color: var(--primary-blue); color: var(--text-white); }
+        .category-tab.active { background: var(--accent-gradient); border-color: transparent; color: white; }
+        .category-content { display: none; animation: fadeIn 0.3s ease; }
+        .category-content.active { display: block; }
+        .troubleshoot-category-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; color: var(--accent-cyan); display: flex; align-items: center; gap: 10px; }
+        .troubleshoot-grid { display: grid; gap: 12px; }
+        .troubleshoot-item { background: var(--dark-surface); border-radius: 14px; padding: 20px; margin-bottom: 12px; }
+        .troubleshoot-item h4 { color: var(--error); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .troubleshoot-item p { color: var(--text-gray); margin-bottom: 12px; }
+        .troubleshoot-solution { display: flex; align-items: flex-start; gap: 8px; color: var(--success); font-weight: 500; padding-top: 12px; border-top: 1px solid var(--dark-border); }
+        .quick-fix-tag { display: inline-flex; align-items: center; gap: 4px; background: rgba(16, 185, 129, 0.15); color: var(--success); padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 600; margin-left: 8px; }
+        .escalation-tag { display: inline-flex; align-items: center; gap: 4px; background: rgba(245, 158, 11, 0.15); color: var(--warning); padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 600; margin-left: 8px; }
+        .script-box { background: var(--dark-bg); border: 1px solid var(--dark-border); border-radius: 8px; padding: 12px; margin-top: 12px; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.85rem; color: var(--accent-cyan); white-space: pre-wrap; line-height: 1.6; }
+        .success-celebration { display: none; text-align: center; padding: 80px 40px; animation: celebrationAppear 0.6s ease; }
+        .success-celebration.show { display: block; }
+        @keyframes celebrationAppear { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .celebration-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 60px var(--success-glow);
+            animation: pulse-success 2s infinite;
+        }
+        @keyframes pulse-success {
+            0%, 100% { box-shadow: 0 0 60px var(--success-glow); }
+            50% { box-shadow: 0 0 80px var(--success-glow), 0 0 120px rgba(16, 185, 129, 0.2); }
+        }
+        .success-celebration h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--success), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+        .success-celebration p { color: var(--text-gray); font-size: 1.1rem; max-width: 400px; margin: 0 auto; }
+        .reset-section { text-align: center; padding: 40px 20px; }
+        .reset-btn {
+            background: transparent;
+            border: 2px solid var(--dark-border);
+            padding: 14px 28px;
+            border-radius: 12px;
+            color: var(--text-gray);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .reset-btn:hover { border-color: var(--primary-blue); color: var(--text-white); }
+        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
+        .confetti { position: absolute; width: 10px; height: 10px; opacity: 0; }
+        .footer { text-align: center; padding: 30px; color: var(--text-muted); font-size: 0.85rem; }
+        .footer a { color: var(--primary-blue); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern">
+        <div class="bg-gradient-1"></div>
+        <div class="bg-gradient-2"></div>
+        <div class="grid-pattern"></div>
+    </div>
+    <div class="confetti-container" id="confetti"></div>
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <img src="assets/images/logo.png" alt="Unicorn Marketers" class="logo">
+            </div>
+            <div class="header-badge">Internal Training Guide</div>
+            <h1>Landing Page<br>Deployment Guide</h1>
+            <p>Get your pages live in minutes. No coding. No confusion. Just results.</p>
+        </header>
+
+        <div class="main-card">
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-label">
+                        <div class="progress-icon">🚀</div>
+                        <div class="progress-text">
+                            <h3>Deployment Progress</h3>
+                            <span id="progress-status">Select a path to begin</span>
+                        </div>
+                    </div>
+                    <div class="progress-percent" id="progress-percent">0%</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+                <div class="step-indicators" id="step-indicators"></div>
+            </div>
+
+            <div class="path-selection" id="path-selection">
+                <div class="section-header">
+                    <h2>Choose Your Deployment Path</h2>
+                    <p>How do you want to host this landing page?</p>
+                </div>
+                <div class="path-grid">
+                    <div class="path-card" data-path="path-a" onclick="selectPath('path-a')">
+                        <div class="selected-check">✓</div>
+                        <div class="path-card-content">
+                            <div class="path-icon-container">🏠</div>
+                            <h3>Path A: You Host It</h3>
+                            <p>You deploy the page on Netlify or Cloudflare (free). Client just adds a simple DNS record to point their subdomain.</p>
+                            <span class="path-tag tag-recommended">⚡ Recommended</span>
+                        </div>
+                    </div>
+                    <div class="path-card" data-path="path-b" onclick="selectPath('path-b')">
+                        <div class="selected-check">✓</div>
+                        <div class="path-card-content">
+                            <div class="path-icon-container">📦</div>
+                            <h3>Path B: Client Owns 100%</h3>
+                            <p>Hand off the files with clear instructions. The client hosts on their own platform with full ownership.</p>
+                            <span class="path-tag tag-advanced">📋 Client Controlled</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- PATH A -->
+                <div id="path-a" class="path-content">
+                    <div class="info-banner">
+                        <div class="info-banner-icon">💡</div>
+                        <div>
+                            <h4>What You'll Do</h4>
+                            <p>Upload the page to a free hosting service, then send the client a simple DNS record to add. Total time: ~10 minutes.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 1 -->
+                    <div class="step-card" data-step="1">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">1</div>
+                            <div class="step-info">
+                                <div class="step-title">Choose Your Hosting Platform</div>
+                                <div class="step-subtitle">Pick where to host the page (both are free)</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 1 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="platform-tabs">
+                                    <div class="platform-tab active" onclick="switchPlatform('netlify', this)"><div class="platform-tab-icon">▲</div><span>Netlify</span></div>
+                                    <div class="platform-tab" onclick="switchPlatform('cloudflare', this)"><div class="platform-tab-icon">☁️</div><span>Cloudflare Pages</span></div>
+                                </div>
+                                <div id="platform-netlify" class="platform-content active">
+                                    <div class="instruction-block">
+                                        <h4>🌐 Why Netlify?</h4>
+                                        <p style="color: var(--text-gray); line-height: 1.7;">Netlify is the <strong>easiest option</strong>. You literally drag and drop your files, and they handle everything else. It's 100% free for our use case and takes about 30 seconds to deploy.</p>
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <div class="alert-icon">ℹ️</div>
+                                        <div class="alert-content"><strong>Don't have an account yet?</strong> Go to <code>netlify.com</code> and sign up with your Google account. It takes 30 seconds.</div>
+                                    </div>
+                                </div>
+                                <div id="platform-cloudflare" class="platform-content">
+                                    <div class="instruction-block">
+                                        <h4>☁️ Why Cloudflare Pages?</h4>
+                                        <p style="color: var(--text-gray); line-height: 1.7;">Cloudflare Pages is <strong>blazing fast</strong> and has a generous free tier. Great choice if the client is already using Cloudflare for their DNS (many are!).</p>
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <div class="alert-icon">ℹ️</div>
+                                        <div class="alert-content"><strong>Don't have an account yet?</strong> Go to <code>pages.cloudflare.com</code> and sign up. Free account works perfectly.</div>
+                                    </div>
+                                </div>
+                                <div class="checklist">
+                                    <h4>✅ Confirm before moving on:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a1-c1" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a1-c1">I've chosen Netlify or Cloudflare</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a1-c2" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a1-c2">I'm logged into my account (or just created one)</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)"><span>✓</span> Complete Step 1</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="step-card" data-step="2">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">2</div>
+                            <div class="step-info">
+                                <div class="step-title">Upload Your Landing Page Files</div>
+                                <div class="step-subtitle">Get your page live on the internet</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 2 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div id="upload-netlify" class="platform-content active">
+                                    <div class="instruction-block">
+                                        <h4>📁 Uploading to Netlify (Drag & Drop)</h4>
+                                        <ol>
+                                            <li><strong>Find your landing page folder</strong> on your computer (the one Claude created with your HTML file and images)</li>
+                                            <li>Go to <code>app.netlify.com</code> and make sure you're logged in</li>
+                                            <li>Look at the <strong>bottom of your screen</strong> for the drop zone</li>
+                                            <li><strong>Drag your entire folder</strong> and drop it into that zone</li>
+                                        </ol>
+                                    </div>
+                                    <div class="visual-mockup">
+                                        <div class="mockup-browser-bar">
+                                            <div class="mockup-dots"><div class="mockup-dot red"></div><div class="mockup-dot yellow"></div><div class="mockup-dot green"></div></div>
+                                            <div class="mockup-url">app.netlify.com</div>
+                                        </div>
+                                        <div class="mockup-content">
+                                            <div class="mockup-dropzone">
+                                                <div class="dropzone-icon">📂</div>
+                                                <div class="dropzone-text">Drag and drop your site folder here</div>
+                                                <div class="dropzone-subtext">Or browse to upload</div>
+                                                <div class="click-indicator">👆 DROP YOUR FOLDER HERE</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-success">
+                                        <div class="alert-icon">🎉</div>
+                                        <div class="alert-content"><strong>After dropping your files:</strong> Netlify will instantly deploy your site and give you a URL like: <code>random-name-12345.netlify.app</code></div>
+                                    </div>
+                                </div>
+                                <div id="upload-cloudflare" class="platform-content">
+                                    <div class="instruction-block">
+                                        <h4>📁 Uploading to Cloudflare Pages</h4>
+                                        <ol>
+                                            <li>Go to <code>dash.cloudflare.com</code> and log in</li>
+                                            <li>Click <strong>"Workers & Pages"</strong> in the left sidebar</li>
+                                            <li>Click the blue <strong>"Create"</strong> button</li>
+                                            <li>Select the <strong>"Pages"</strong> tab</li>
+                                            <li>Click <strong>"Upload assets"</strong></li>
+                                            <li>Name your project (e.g., <code>client-landing-page</code>)</li>
+                                            <li>Select or drag your folder</li>
+                                            <li>Click <strong>"Deploy site"</strong></li>
+                                        </ol>
+                                    </div>
+                                    <div class="alert alert-success">
+                                        <div class="alert-icon">🎉</div>
+                                        <div class="alert-content"><strong>After deploying:</strong> Cloudflare will give you a URL like: <code>project-name.pages.dev</code></div>
+                                    </div>
+                                </div>
+                                <div class="instruction-block">
+                                    <h4>📝 Save Your URL</h4>
+                                    <p style="color: var(--text-gray);">Write down your new site URL. You'll need it for the next step!</p>
+                                    <div class="copy-box"><code>your-site-name.netlify.app</code></div>
+                                </div>
+                                <div class="checklist">
+                                    <h4>✅ Confirm before moving on:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a2-c1" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a2-c1">I uploaded my files and the deployment completed</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a2-c2" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a2-c2">I can see my landing page when I visit the URL</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a2-c3" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a2-c3">I saved my site URL (the .netlify.app or .pages.dev address)</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)"><span>✓</span> Complete Step 2</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="step-card" data-step="3">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">3</div>
+                            <div class="step-info">
+                                <div class="step-title">Add Custom Domain in Your Dashboard</div>
+                                <div class="step-subtitle">Tell Netlify/Cloudflare about the client's domain</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 2 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="alert alert-warning">
+                                    <div class="alert-icon">⚠️</div>
+                                    <div class="alert-content"><strong>Two-part process:</strong> You do Part 1 (add domain in dashboard), then send the client Part 2 (DNS instructions).</div>
+                                </div>
+                                <div id="domain-netlify" class="platform-content active">
+                                    <div class="instruction-block">
+                                        <h4>🔧 Part 1: Add Domain in Netlify (You do this)</h4>
+                                        <ol>
+                                            <li>In Netlify, click on your <strong>site name</strong> to open the dashboard</li>
+                                            <li>Click <strong>"Domain settings"</strong> (or Site settings → Domain management)</li>
+                                            <li>Click <strong>"Add a domain"</strong></li>
+                                            <li>Type the client's subdomain: <code>promo.clientsite.com</code></li>
+                                            <li>Click <strong>"Verify"</strong> then <strong>"Add domain"</strong></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div id="domain-cloudflare" class="platform-content">
+                                    <div class="instruction-block">
+                                        <h4>🔧 Part 1: Add Domain in Cloudflare (You do this)</h4>
+                                        <ol>
+                                            <li>Go to your Pages project dashboard</li>
+                                            <li>Click the <strong>"Custom domains"</strong> tab</li>
+                                            <li>Click <strong>"Set up a custom domain"</strong></li>
+                                            <li>Enter the client's subdomain: <code>promo.clientsite.com</code></li>
+                                            <li>Click <strong>"Continue"</strong> then <strong>"Activate domain"</strong></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="alert alert-info">
+                                    <div class="alert-icon">💡</div>
+                                    <div class="alert-content"><strong>Don't worry about the warning!</strong> It will say DNS isn't configured yet — that's expected. The client fixes this in Part 2.</div>
+                                </div>
+                                <div class="checklist">
+                                    <h4>✅ Confirm before moving on:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a3-c1" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a3-c1">I added the client's subdomain in my hosting dashboard</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)"><span>✓</span> Complete Step 3</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="step-card" data-step="4">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">4</div>
+                            <div class="step-info">
+                                <div class="step-title">Send DNS Instructions to Client</div>
+                                <div class="step-subtitle">Give them what they need to connect their domain</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 2 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="message-template">
+                                    <div class="message-template-header"><span>📨</span><h4>Part 2: Copy & Send This to Your Client</h4></div>
+                                    <div class="message-content">
+                                        <p>Hi! 👋</p>
+                                        <p>Your new landing page is ready! To make it live at <strong>[subdomain.yourdomain.com]</strong>, we just need you to add one DNS record.</p>
+                                        <p><strong>Here's what to add:</strong></p>
+                                        <table class="dns-table">
+                                            <tr><th>Type</th><th>Name</th><th>Target/Value</th></tr>
+                                            <tr><td>CNAME</td><td>[subdomain]</td><td>[your-site].netlify.app</td></tr>
+                                        </table>
+                                        <p>If you use GoDaddy, Cloudflare, Namecheap, or another provider, their DNS settings will have a place to add this.</p>
+                                        <p>Let me know once it's added and I'll verify everything is working! 🚀</p>
+                                    </div>
+                                    <button class="copy-btn" onclick="copyClientMessage(this)" style="margin-top: 20px;">📋 Copy Message</button>
+                                </div>
+                                <div class="checklist">
+                                    <h4>✅ Confirm before moving on:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a4-c1" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a4-c1">I customized the message with the actual subdomain and URL</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a4-c2" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a4-c2">I sent the DNS instructions to the client</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)"><span>✓</span> Complete Step 4</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="step-card" data-step="5">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">5</div>
+                            <div class="step-info">
+                                <div class="step-title">Help Client with DNS (If Needed)</div>
+                                <div class="step-subtitle">Guide them through adding the CNAME record</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 5 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="alert alert-info">
+                                    <div class="alert-icon">📞</div>
+                                    <div class="alert-content"><strong>If the client needs help,</strong> use these platform-specific guides:</div>
+                                </div>
+                                <div class="platform-tabs" style="margin-top: 20px;">
+                                    <div class="platform-tab active" onclick="switchDNS('godaddy', this)">GoDaddy</div>
+                                    <div class="platform-tab" onclick="switchDNS('namecheap', this)">Namecheap</div>
+                                    <div class="platform-tab" onclick="switchDNS('cloudflare-dns', this)">Cloudflare</div>
+                                </div>
+                                <div id="dns-godaddy" class="platform-content active">
+                                    <div class="instruction-block">
+                                        <h4>🔧 Adding CNAME in GoDaddy</h4>
+                                        <ol>
+                                            <li>Log into <code>godaddy.com</code></li>
+                                            <li>Click <strong>"My Products"</strong></li>
+                                            <li>Find the domain → click <strong>"DNS"</strong></li>
+                                            <li>Click <strong>"ADD"</strong> button</li>
+                                            <li>Type: <strong>CNAME</strong></li>
+                                            <li>Name: Just the subdomain (e.g., <code>promo</code>)</li>
+                                            <li>Value: Your Netlify/Cloudflare URL</li>
+                                            <li>Click <strong>"Save"</strong></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div id="dns-namecheap" class="platform-content">
+                                    <div class="instruction-block">
+                                        <h4>🔧 Adding CNAME in Namecheap</h4>
+                                        <ol>
+                                            <li>Log into <code>namecheap.com</code></li>
+                                            <li>Go to <strong>"Domain List"</strong></li>
+                                            <li>Click <strong>"Manage"</strong> → <strong>"Advanced DNS"</strong></li>
+                                            <li>Click <strong>"ADD NEW RECORD"</strong></li>
+                                            <li>Type: <strong>CNAME Record</strong></li>
+                                            <li>Host: The subdomain (e.g., <code>promo</code>)</li>
+                                            <li>Target: Your hosting URL</li>
+                                            <li>Click the <strong>✓</strong> to save</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div id="dns-cloudflare-dns" class="platform-content">
+                                    <div class="instruction-block">
+                                        <h4>🔧 Adding CNAME in Cloudflare</h4>
+                                        <ol>
+                                            <li>Log into <code>dash.cloudflare.com</code></li>
+                                            <li>Click on the domain</li>
+                                            <li>Click <strong>"DNS"</strong> in sidebar</li>
+                                            <li>Click <strong>"Add record"</strong></li>
+                                            <li>Type: <strong>CNAME</strong></li>
+                                            <li>Name: The subdomain</li>
+                                            <li>Target: Your hosting URL</li>
+                                            <li><strong>IMPORTANT:</strong> Click the orange cloud to turn it <strong>gray</strong></li>
+                                            <li>Click <strong>"Save"</strong></li>
+                                        </ol>
+                                    </div>
+                                    <div class="alert alert-warning">
+                                        <div class="alert-icon">⚠️</div>
+                                        <div class="alert-content"><strong>Critical:</strong> The cloud MUST be gray (DNS only), not orange. Orange can cause SSL issues.</div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-warning" style="margin-top: 20px;">
+                                    <div class="alert-icon">⏰</div>
+                                    <div class="alert-content"><strong>DNS propagation:</strong> Changes can take 5-30 minutes (sometimes up to 24 hours). If it doesn't work immediately, wait and retry.</div>
+                                </div>
+                                <div class="checklist">
+                                    <h4>✅ Confirm before moving on:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a5-c1" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a5-c1">Client confirmed they added the CNAME record</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)"><span>✓</span> Complete Step 5</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="step-card" data-step="6">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">6</div>
+                            <div class="step-info">
+                                <div class="step-title">Final Verification</div>
+                                <div class="step-subtitle">Make sure everything is working perfectly</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 2 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="instruction-block">
+                                    <h4>🔍 Final Checks</h4>
+                                    <p style="color: var(--text-gray);">Go through each of these to confirm the deployment is complete:</p>
+                                </div>
+                                <div class="checklist">
+                                    <h4>✅ Verification Checklist:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a6-c1" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a6-c1">Page loads at the client's subdomain (e.g., promo.client.com)</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a6-c2" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a6-c2">HTTPS is working (🔒 padlock shows in browser)</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a6-c3" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a6-c3">All images and content display correctly</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a6-c4" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a6-c4">Forms and buttons work as expected</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="a6-c5" onchange="updateChecklist()"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="a6-c5">Tested on mobile and looks good</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)">🎉 Complete Deployment!</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comprehensive Troubleshooting -->
+                    <div class="troubleshoot-section">
+                        <div class="troubleshoot-header" onclick="toggleTroubleshoot(this)">
+                            <h3>🔧 Comprehensive Troubleshooting Guide</h3>
+                            <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                        </div>
+                        <div class="troubleshoot-content">
+                            <div class="troubleshoot-inner">
+                                <div class="troubleshoot-categories">
+                                    <div class="category-tab active" onclick="switchTroubleshootCategory('dns', this)">🌐 DNS & Domain</div>
+                                    <div class="category-tab" onclick="switchTroubleshootCategory('ssl', this)">🔒 SSL/HTTPS</div>
+                                    <div class="category-tab" onclick="switchTroubleshootCategory('files', this)">📁 Files & Assets</div>
+                                    <div class="category-tab" onclick="switchTroubleshootCategory('cloudflare', this)">☁️ Cloudflare</div>
+                                    <div class="category-tab" onclick="switchTroubleshootCategory('environment', this)">💻 Client Environment</div>
+                                    <div class="category-tab" onclick="switchTroubleshootCategory('business', this)">🏢 Business Blockers</div>
+                                </div>
+
+                                <div id="troubleshoot-dns" class="category-content active">
+                                    <div class="troubleshoot-category-title">🌐 DNS & Domain Access Issues</div>
+                                    <div class="troubleshoot-grid">
+                                        <div class="troubleshoot-item"><h4>❌ "DNS_PROBE_FINISHED_NXDOMAIN" <span class="quick-fix-tag">⏱️ Quick Fix</span></h4><p>The subdomain doesn't exist yet - DNS hasn't propagated or CNAME wasn't added.</p><div class="troubleshoot-solution">✅ Wait 15-30 minutes. If still not working, verify the CNAME record values are exactly correct (no typos, no trailing dots).</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Client doesn't know their DNS login</h4><p>They can't access their domain registrar or DNS provider account.</p><div class="troubleshoot-solution">✅ Ask who set up their domain originally. Check email for "domain registration" receipts. Common providers: GoDaddy, Namecheap, Google Domains, Cloudflare. Try password reset.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Domain registrar ≠ DNS host <span class="escalation-tag">⚡ Common Confusion</span></h4><p>Client bought domain at GoDaddy but DNS is managed by Cloudflare (or vice versa).</p><div class="troubleshoot-solution">✅ Use <code>whois.domaintools.com</code> to look up the domain's nameservers. This tells you who actually manages DNS.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Client entered full domain instead of subdomain</h4><p>They typed <code>promo.example.com</code> in the Name field instead of just <code>promo</code>.</p><div class="troubleshoot-solution">✅ The Name/Host field should ONLY contain the subdomain part. If they want <code>promo.example.com</code>, they enter just <code>promo</code>.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Conflicting DNS record already exists</h4><p>There's already an A record or another CNAME for the same subdomain.</p><div class="troubleshoot-solution">✅ Delete the existing record first, then add the new CNAME. You cannot have both an A record and CNAME for the same subdomain.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Client wants root domain (not subdomain)</h4><p>They want <code>example.com</code> instead of <code>promo.example.com</code>.</p><div class="troubleshoot-solution">✅ CNAME records cannot be used at the root domain. Options: Use Cloudflare (supports CNAME flattening), or use Netlify/Cloudflare's DNS directly.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Domain is expired or locked</h4><p>Domain shows as expired, pending deletion, or has a registrar lock.</p><div class="troubleshoot-solution">✅ Client needs to renew their domain or contact their registrar to unlock it. Check expiration at <code>whois.domaintools.com</code>.</div></div>
+                                    </div>
+                                </div>
+
+                                <div id="troubleshoot-ssl" class="category-content">
+                                    <div class="troubleshoot-category-title">🔒 SSL/HTTPS Issues</div>
+                                    <div class="troubleshoot-grid">
+                                        <div class="troubleshoot-item"><h4>❌ "Your connection is not private" / SSL Error <span class="quick-fix-tag">⏱️ Quick Fix</span></h4><p>SSL certificate hasn't been issued yet (Netlify/Cloudflare provision these automatically).</p><div class="troubleshoot-solution">✅ Go to your hosting dashboard → Domain settings → Click "Verify DNS" or "Retry". Wait 5-10 minutes.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ CAA record blocking certificate</h4><p>Domain has a CAA record that only allows specific certificate authorities.</p><div class="troubleshoot-solution">✅ Check for CAA records in DNS. Either remove them or add: For Netlify add <code>letsencrypt.org</code>, for Cloudflare add <code>digicert.com</code>.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Mixed content warnings (page loads but shows "not secure")</h4><p>Page is HTTPS but loads images/scripts via HTTP.</p><div class="troubleshoot-solution">✅ Check your HTML for any <code>http://</code> URLs. Change all resource URLs to <code>https://</code>.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Redirect loop (ERR_TOO_MANY_REDIRECTS)</h4><p>Usually happens when Cloudflare's "Always Use HTTPS" conflicts with Netlify's forced HTTPS.</p><div class="troubleshoot-solution">✅ If using Cloudflare DNS with Netlify: Turn OFF "Always Use HTTPS" in Cloudflare, OR set SSL mode to "Full (strict)".</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Certificate doesn't cover subdomain</h4><p>Client has SSL but it's not a wildcard - doesn't cover the new subdomain.</p><div class="troubleshoot-solution">✅ Netlify/Cloudflare Pages auto-provision individual certificates. If using client's own SSL, they need a wildcard cert.</div></div>
+                                    </div>
+                                </div>
+
+                                <div id="troubleshoot-files" class="category-content">
+                                    <div class="troubleshoot-category-title">📁 Files & Asset Issues</div>
+                                    <div class="troubleshoot-grid">
+                                        <div class="troubleshoot-item"><h4>❌ 404 Not Found <span class="quick-fix-tag">⏱️ Quick Fix</span></h4><p>Main file isn't named correctly or is in wrong location.</p><div class="troubleshoot-solution">✅ Main file MUST be named <code>index.html</code> (all lowercase). It must be in the root of your uploaded folder.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Case sensitivity issues (works locally, broken online)</h4><p>Files named <code>Image.PNG</code> but referenced as <code>image.png</code>.</p><div class="troubleshoot-solution">✅ Linux servers are case-sensitive. <code>Image.PNG</code> ≠ <code>image.png</code>. Rename all files to lowercase.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Images not loading (broken image icons)</h4><p>Image paths are wrong or files weren't included in upload.</p><div class="troubleshoot-solution">✅ Check that: 1) All images are in the folder, 2) Paths are relative (e.g., <code>assets/images/photo.jpg</code>), 3) No absolute paths.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Spaces or special characters in filenames</h4><p>File named <code>hero image (1).jpg</code> causes issues.</p><div class="troubleshoot-solution">✅ Rename files to remove spaces and special characters. Use hyphens: <code>hero-image-1.jpg</code>.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Fonts not loading</h4><p>Custom fonts or Google Fonts not displaying.</p><div class="troubleshoot-solution">✅ Check if Google Fonts is blocked (some corporate networks). Consider self-hosting fonts.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ External scripts blocked</h4><p>Third-party scripts (analytics, chat widgets) not working.</p><div class="troubleshoot-solution">✅ Some corporate firewalls block external scripts. Test from non-corporate network. Check browser console.</div></div>
+                                    </div>
+                                </div>
+
+                                <div id="troubleshoot-cloudflare" class="category-content">
+                                    <div class="troubleshoot-category-title">☁️ Cloudflare-Specific Issues</div>
+                                    <div class="troubleshoot-grid">
+                                        <div class="troubleshoot-item"><h4>❌ Orange cloud enabled (should be gray) <span class="escalation-tag">⚡ Very Common</span></h4><p>When pointing to Netlify, the Cloudflare proxy (orange cloud) causes SSL conflicts.</p><div class="troubleshoot-solution">✅ Click the orange cloud icon to turn it GRAY. Gray = DNS only (what we want). Orange = Proxied (causes issues).</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ SSL mode set to "Flexible"</h4><p>Causes redirect loops when the destination already has SSL.</p><div class="troubleshoot-solution">✅ Go to SSL/TLS settings → Change mode to "Full" or "Full (strict)". Never use "Flexible" with Netlify.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Page Rules interfering</h4><p>Existing page rules for redirects or caching affecting the new subdomain.</p><div class="troubleshoot-solution">✅ Check Page Rules in Cloudflare dashboard. Look for wildcard rules that might match the new subdomain.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Under Attack Mode enabled</h4><p>All visitors see a Cloudflare challenge page before the site.</p><div class="troubleshoot-solution">✅ Go to Security → Under Attack Mode → Turn OFF. This is meant for DDoS attacks, not normal operation.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Caching showing old content</h4><p>Cloudflare cached the old version and isn't showing updates.</p><div class="troubleshoot-solution">✅ Go to Caching → Purge Everything. Or use Development Mode temporarily.</div></div>
+                                    </div>
+                                </div>
+
+                                <div id="troubleshoot-environment" class="category-content">
+                                    <div class="troubleshoot-category-title">💻 Client Environment Issues</div>
+                                    <div class="troubleshoot-grid">
+                                        <div class="troubleshoot-item"><h4>❌ Works for you, not for client</h4><p>DNS propagated to your location but not theirs yet.</p><div class="troubleshoot-solution">✅ DNS propagation varies by location. Ask client to wait 30 min. Or try on mobile data (different DNS servers).</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Browser caching old DNS</h4><p>Client's browser cached the "domain not found" response.</p><div class="troubleshoot-solution">✅ Have client: 1) Clear browser cache, 2) Try incognito window, 3) Flush DNS cache (Windows: <code>ipconfig /flushdns</code>).</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Corporate firewall blocking subdomain</h4><p>Client's company firewall blocks new/unknown subdomains.</p><div class="troubleshoot-solution">✅ Ask client to test on their phone (not company WiFi). If it works, they need IT to whitelist the subdomain.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ VPN interfering</h4><p>Client's VPN uses different DNS servers that haven't updated.</p><div class="troubleshoot-solution">✅ Ask client to temporarily disconnect VPN and test. VPNs often have slower DNS propagation.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ ISP DNS caching</h4><p>Client's internet provider has aggressive DNS caching.</p><div class="troubleshoot-solution">✅ Try using Google DNS (8.8.8.8) or Cloudflare DNS (1.1.1.1). Or wait 24-48 hours.</div></div>
+                                    </div>
+                                </div>
+
+                                <div id="troubleshoot-business" class="category-content">
+                                    <div class="troubleshoot-category-title">🏢 Business & Access Blockers</div>
+                                    <div class="troubleshoot-grid">
+                                        <div class="troubleshoot-item"><h4>❌ "IT handles our DNS"</h4><p>Client doesn't have direct access - their IT department manages everything.</p><div class="troubleshoot-solution">✅ Prepare clear instructions for IT. Offer to join a call if needed.</div><div class="script-box">Hi IT Team,
+
+We need to add a DNS record for a new landing page:
+
+Type: CNAME
+Name: [subdomain]
+Target: [your-site].netlify.app
+TTL: Auto/Default
+
+Please let us know once added. Thanks!</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Multiple stakeholders need approval</h4><p>Marketing can't make DNS changes without leadership/legal/IT approval.</p><div class="troubleshoot-solution">✅ Provide documentation explaining CNAME records (they don't affect email, main site, or security). Frame it as very low risk.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Client locked out of registrar account</h4><p>Forgot password, no access to 2FA, or the person who set it up left the company.</p><div class="troubleshoot-solution">✅ Contact the domain registrar's support directly. They can help recover access with proof of ownership.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Subdomain already in use</h4><p>Client wants <code>promo.site.com</code> but it's already pointing somewhere else.</p><div class="troubleshoot-solution">✅ Options: 1) Use a different subdomain (e.g., <code>offer.site.com</code>), 2) Delete the old record first.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ "Can you just host it for me?"</h4><p>Client doesn't want to deal with any of this.</p><div class="troubleshoot-solution">✅ Switch to Path A! Host it yourself on Netlify/Cloudflare and send them simple CNAME instructions.</div></div>
+                                        <div class="troubleshoot-item"><h4>❌ Agency or contractor manages their site</h4><p>A third-party agency has all the access, not the client.</p><div class="troubleshoot-solution">✅ Get the agency's contact info. Send them professional instructions. Agencies usually understand DNS quickly.</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PATH B -->
+                <div id="path-b" class="path-content">
+                    <div class="info-banner">
+                        <div class="info-banner-icon">📦</div>
+                        <div>
+                            <h4>What You'll Do</h4>
+                            <p>Package the files with clear instructions and send to the client. They'll host it themselves with full ownership.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card" data-step="1">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">1</div>
+                            <div class="step-info">
+                                <div class="step-title">Prepare the File Package</div>
+                                <div class="step-subtitle">Get everything organized for handoff</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 3 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="instruction-block">
+                                    <h4>📁 What to Include:</h4>
+                                    <ol>
+                                        <li><strong>index.html</strong> — Main HTML file (must be this exact name)</li>
+                                        <li><strong>/assets/images/</strong> — All images used on the page</li>
+                                        <li><strong>/assets/css/</strong> — Stylesheets (if separate)</li>
+                                        <li><strong>/assets/js/</strong> — JavaScript files (if separate)</li>
+                                        <li><strong>README.txt</strong> — Instructions we'll create</li>
+                                    </ol>
+                                </div>
+                                <div class="alert alert-warning">
+                                    <div class="alert-icon">⚠️</div>
+                                    <div class="alert-content"><strong>Critical:</strong> The main file MUST be named <code>index.html</code> (all lowercase). Web servers look for this by default.</div>
+                                </div>
+                                <div class="checklist">
+                                    <h4>✅ Confirm before moving on:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b1-c1"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b1-c1">Main file is named index.html</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b1-c2"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b1-c2">All images are in assets/images folder</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b1-c3"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b1-c3">Image paths are relative (not C:\Users\...)</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b1-c4"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b1-c4">Everything is zipped into one file</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)"><span>✓</span> Complete Step 1</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card" data-step="2">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">2</div>
+                            <div class="step-info">
+                                <div class="step-title">Create the README</div>
+                                <div class="step-subtitle">Include deployment instructions</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 2 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="instruction-block">
+                                    <h4>📝 README Template</h4>
+                                    <p style="color: var(--text-gray);">Copy this, customize it, and save as <code>README.txt</code>:</p>
+                                </div>
+                                <div class="script-box">LANDING PAGE DEPLOYMENT INSTRUCTIONS
+====================================
+
+Files included:
+- index.html (main page)
+- /assets/images/ (all images)
+
+OPTION 1: Using Netlify (Easiest - FREE)
+-----------------------------------------
+1. Go to netlify.com and sign up (free)
+2. Drag and drop this folder onto the dashboard
+3. Done! Your page is live at .netlify.app
+4. For custom domain: Site Settings > Domain Management
+
+OPTION 2: Your Existing Hosting
+-------------------------------
+1. Log into your web hosting (cPanel, Plesk, etc.)
+2. Go to File Manager > public_html
+3. Create a folder for this page (e.g., "promo")
+4. Upload all files there
+5. Access at: yourdomain.com/promo
+
+Need help? Contact [YOUR NAME/EMAIL]</div>
+                                <button class="copy-btn" onclick="copyReadme(this)">📋 Copy README</button>
+                                <div class="checklist">
+                                    <h4>✅ Confirm before moving on:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b2-c1"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b2-c1">I customized the README with my contact info</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b2-c2"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b2-c2">I saved it as README.txt in the folder</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)"><span>✓</span> Complete Step 2</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card" data-step="3">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">3</div>
+                            <div class="step-info">
+                                <div class="step-title">Send the Handoff Email</div>
+                                <div class="step-subtitle">Deliver the files with instructions</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ 2 min</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="message-template">
+                                    <div class="message-template-header"><span>📧</span><h4>Email Template</h4></div>
+                                    <div class="message-content">
+                                        <p><strong>Subject:</strong> Your Landing Page is Ready! 🚀 [Files Attached]</p>
+                                        <p>Hi [CLIENT NAME],</p>
+                                        <p>Your landing page is complete and ready to go live!</p>
+                                        <p><strong>📦 Attached:</strong> Your complete landing page package (ZIP file)</p>
+                                        <p>I've included a README with deployment options. The easiest is Netlify (free) - just drag and drop!</p>
+                                        <p>Best,<br>[YOUR NAME]</p>
+                                    </div>
+                                    <button class="copy-btn" onclick="copyHandoffEmail(this)" style="margin-top: 20px;">📋 Copy Email</button>
+                                </div>
+                                <div class="checklist">
+                                    <h4>✅ Confirm before moving on:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b3-c1"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b3-c1">I attached the ZIP file</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b3-c2"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b3-c2">I sent the email to the client</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)"><span>✓</span> Complete Step 3</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card" data-step="4">
+                        <div class="step-header" onclick="toggleStep(this)">
+                            <div class="step-number-badge">4</div>
+                            <div class="step-info">
+                                <div class="step-title">Verify Client Deployment</div>
+                                <div class="step-subtitle">Confirm the page is live and working</div>
+                            </div>
+                            <div class="step-meta">
+                                <div class="time-badge">⏱️ varies</div>
+                                <div class="step-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-inner">
+                                <div class="checklist">
+                                    <h4>✅ Final Verification:</h4>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b4-c1"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b4-c1">Client confirmed the page is deployed</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="custom-checkbox"><input type="checkbox" id="b4-c2"><div class="checkbox-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div></div>
+                                        <label for="b4-c2">I visited the URL and it looks correct</label>
+                                    </div>
+                                </div>
+                                <button class="complete-btn" onclick="completeStep(this)">🎉 Complete Handoff!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-celebration" id="success-celebration">
+                    <div class="celebration-icon">🎉</div>
+                    <h2>Deployment Complete!</h2>
+                    <p>Your landing page is live and ready to convert. Great work!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="reset-section">
+            <button class="reset-btn" onclick="resetProgress()">↺ Reset Progress</button>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 <a href="https://unicornmarketers.com" target="_blank">Unicorn Marketers</a>. Internal Training Guide.</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentPath = null;
+        let completedSteps = { 'path-a': [], 'path-b': [] };
+        const totalSteps = { 'path-a': 6, 'path-b': 4 };
+        let currentPlatform = 'netlify';
+
+        function loadState() {
+            const saved = localStorage.getItem('unicornDeployGuide');
+            if (saved) {
+                const state = JSON.parse(saved);
+                currentPath = state.currentPath;
+                completedSteps = state.completedSteps || { 'path-a': [], 'path-b': [] };
+                currentPlatform = state.currentPlatform || 'netlify';
+                if (currentPath) {
+                    selectPath(currentPath, false);
+                    completedSteps[currentPath].forEach(stepNum => {
+                        const step = document.querySelector(`#${currentPath} .step-card[data-step="${stepNum}"]`);
+                        if (step) step.classList.add('completed');
+                    });
+                    updateProgress();
+                    updateStepIndicators();
+                }
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('unicornDeployGuide', JSON.stringify({ currentPath, completedSteps, currentPlatform }));
+        }
+
+        function selectPath(path, animate = true) {
+            currentPath = path;
+            document.querySelectorAll('.path-card').forEach(c => c.classList.remove('selected'));
+            document.querySelector(`.path-card[data-path="${path}"]`).classList.add('selected');
+            document.querySelectorAll('.path-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(path).classList.add('active');
+            document.getElementById('progress-status').textContent = `${path === 'path-a' ? 'Path A' : 'Path B'} selected`;
+            updateStepIndicators();
+            if (animate) {
+                const firstStep = document.querySelector(`#${path} .step-card[data-step="1"]`);
+                if (firstStep) setTimeout(() => { firstStep.classList.add('open', 'active'); firstStep.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 400);
+            }
+            updateProgress();
+            saveState();
+        }
+
+        function updateStepIndicators() {
+            const container = document.getElementById('step-indicators');
+            if (!currentPath) { container.innerHTML = ''; return; }
+            const total = totalSteps[currentPath];
+            const completed = completedSteps[currentPath];
+            let html = '';
+            for (let i = 1; i <= total; i++) {
+                let cls = 'step-dot';
+                if (completed.includes(i)) cls += ' completed';
+                else if (completed.length + 1 === i) cls += ' active';
+                html += `<div class="${cls}"></div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function toggleStep(header) {
+            const step = header.parentElement;
+            const wasOpen = step.classList.contains('open');
+            document.querySelectorAll(`#${currentPath} .step-card`).forEach(s => s.classList.remove('open', 'active'));
+            if (!wasOpen) step.classList.add('open', 'active');
+        }
+
+        function completeStep(btn) {
+            const step = btn.closest('.step-card');
+            const stepNum = parseInt(step.dataset.step);
+            step.classList.add('completed');
+            step.classList.remove('open', 'active');
+            if (!completedSteps[currentPath].includes(stepNum)) completedSteps[currentPath].push(stepNum);
+            const nextStep = step.nextElementSibling;
+            if (nextStep && nextStep.classList.contains('step-card')) {
+                setTimeout(() => { nextStep.classList.add('open', 'active'); nextStep.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 400);
+            } else if (completedSteps[currentPath].length >= totalSteps[currentPath]) showCelebration();
+            updateProgress();
+            updateStepIndicators();
+            saveState();
+        }
+
+        function updateProgress() {
+            if (!currentPath) return;
+            const completed = completedSteps[currentPath].length;
+            const total = totalSteps[currentPath];
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-percent').textContent = percent + '%';
+            document.getElementById('progress-status').textContent = `Step ${Math.min(completed + 1, total)} of ${total}`;
+        }
+
+        function switchPlatform(platform, tab) {
+            currentPlatform = platform;
+            document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            ['platform-', 'upload-', 'domain-'].forEach(prefix => {
+                document.querySelectorAll(`[id^="${prefix}"]`).forEach(c => c.classList.remove('active'));
+                const el = document.getElementById(prefix + platform);
+                if (el) el.classList.add('active');
+            });
+            saveState();
+        }
+
+        function switchDNS(provider, tab) {
+            const parent = tab.closest('.step-inner');
+            parent.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            parent.querySelectorAll('[id^="dns-"]').forEach(c => c.classList.remove('active'));
+            document.getElementById('dns-' + provider).classList.add('active');
+        }
+
+        function toggleTroubleshoot(header) { header.parentElement.classList.toggle('open'); }
+
+        function switchTroubleshootCategory(category, tab) {
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.category-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('troubleshoot-' + category).classList.add('active');
+        }
+
+        function showCelebration() {
+            document.getElementById('success-celebration').classList.add('show');
+            document.getElementById('success-celebration').scrollIntoView({ behavior: 'smooth' });
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            const colors = ['#3B9FD8', '#00C4E8', '#10b981', '#f59e0b', '#ffffff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.animation = `confettiFall ${Math.random() * 2 + 2}s ease-out ${Math.random() * 0.5}s forwards`;
+                container.appendChild(confetti);
+            }
+            setTimeout(() => container.innerHTML = '', 4000);
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `@keyframes confettiFall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
+        document.head.appendChild(style);
+
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+            });
+        }
+
+        function copyClientMessage(btn) {
+            copyToClipboard(`Hi! 👋\n\nYour new landing page is ready! To make it live at [subdomain.yourdomain.com], we just need you to add one DNS record.\n\nHere's what to add:\n\nType: CNAME\nName: [subdomain]\nTarget: [your-site].netlify.app\n\nIf you use GoDaddy, Cloudflare, Namecheap, or another domain provider, their DNS settings page will have a place to add this.\n\nLet me know once it's added, and I'll verify everything is working! 🚀`, btn);
+        }
+
+        function copyReadme(btn) {
+            copyToClipboard(`LANDING PAGE DEPLOYMENT INSTRUCTIONS\n====================================\n\nFiles included:\n- index.html (main page)\n- /assets/images/ (all images)\n\nOPTION 1: Using Netlify (Easiest - FREE)\n-----------------------------------------\n1. Go to netlify.com and sign up (free)\n2. Drag and drop this folder onto the dashboard\n3. Done! Your page is live at .netlify.app\n4. For custom domain: Site Settings > Domain Management\n\nOPTION 2: Your Existing Hosting\n-------------------------------\n1. Log into your web hosting (cPanel, Plesk, etc.)\n2. Go to File Manager > public_html\n3. Create a folder for this page (e.g., "promo")\n4. Upload all files there\n5. Access at: yourdomain.com/promo\n\nNeed help? Contact [YOUR NAME/EMAIL]`, btn);
+        }
+
+        function copyHandoffEmail(btn) {
+            copyToClipboard(`Subject: Your Landing Page is Ready! 🚀 [Files Attached]\n\nHi [CLIENT NAME],\n\nYour landing page is complete and ready to go live!\n\n📦 Attached: Your complete landing page package (ZIP file)\n\nI've included a README with deployment options. The easiest is Netlify (free) - just drag and drop!\n\nBest,\n[YOUR NAME]`, btn);
+        }
+
+        function updateChecklist() {}
+        function resetProgress() { if (confirm('Reset all progress?')) { localStorage.removeItem('unicornDeployGuide'); location.reload(); } }
+        document.addEventListener('DOMContentLoaded', loadState);
+    </script>
+</body>
+</html>
