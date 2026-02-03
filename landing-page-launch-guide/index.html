@@ -925,6 +925,7 @@
                                     <div class="platform-tab active" onclick="switchDNS('godaddy', this)">GoDaddy</div>
                                     <div class="platform-tab" onclick="switchDNS('namecheap', this)">Namecheap</div>
                                     <div class="platform-tab" onclick="switchDNS('cloudflare-dns', this)">Cloudflare</div>
+                                    <div class="platform-tab" onclick="switchDNS('shopify', this)">Shopify</div>
                                 </div>
                                 <div id="dns-godaddy" class="platform-content active">
                                     <div class="instruction-block">
@@ -965,6 +966,30 @@
                                     <div class="alert alert-warning">
                                         <div class="alert-icon">⚠️</div>
                                         <div class="alert-content"><strong>Critical:</strong> Cloud must be GRAY (DNS only), not orange!</div>
+                                    </div>
+                                </div>
+                                <div id="dns-shopify" class="platform-content">
+                                    <div class="instruction-block">
+                                        <h4>🛒 Shopify-Managed Domains</h4>
+                                        <ol>
+                                            <li>Log into Shopify Admin → <strong>Settings</strong> (bottom left)</li>
+                                            <li>Click <strong>Domains</strong></li>
+                                            <li>Click the domain you want to modify</li>
+                                            <li>Scroll to <strong>Subdomains</strong> section</li>
+                                            <li>Click <strong>Add subdomain</strong></li>
+                                            <li>Enter subdomain prefix (e.g., <code>promo</code> for promo.store.com)</li>
+                                            <li>Select <strong>Point to external website</strong></li>
+                                            <li>Enter your Netlify/Cloudflare URL as the target</li>
+                                            <li>Click <strong>Save</strong></li>
+                                        </ol>
+                                    </div>
+                                    <div class="alert alert-info" style="margin-top: 15px;">
+                                        <div class="alert-icon">💡</div>
+                                        <div class="alert-content"><strong>Domain Managed Elsewhere?</strong> If the domain was purchased outside Shopify (GoDaddy, Namecheap, etc.) but connected to Shopify, the DNS is still managed at the original registrar. Use those instructions instead.</div>
+                                    </div>
+                                    <div class="alert alert-warning" style="margin-top: 15px;">
+                                        <div class="alert-icon">⚠️</div>
+                                        <div class="alert-content"><strong>Shopify Limitation:</strong> Shopify only supports subdomains for external sites. You cannot point the root domain (store.com) to an external landing page while keeping Shopify active.</div>
                                     </div>
                                 </div>
                                 <div class="alert alert-warning" style="margin-top: 20px;">
@@ -1038,6 +1063,7 @@
                                     <div class="category-tab" onclick="switchTroubleshootCategory('ssl', this)">🔒 SSL</div>
                                     <div class="category-tab" onclick="switchTroubleshootCategory('files', this)">📁 Files</div>
                                     <div class="category-tab" onclick="switchTroubleshootCategory('cloudflare', this)">☁️ Cloudflare</div>
+                                    <div class="category-tab" onclick="switchTroubleshootCategory('shopify', this)">🛒 Shopify</div>
                                     <div class="category-tab" onclick="switchTroubleshootCategory('business', this)">🏢 Business</div>
                                 </div>
                                 <div id="troubleshoot-dns" class="category-content active">
@@ -1064,6 +1090,15 @@
                                     <div class="troubleshoot-item"><h4>❌ Orange cloud enabled</h4><p>Should be gray when pointing to Netlify.</p><div class="troubleshoot-solution">✅ Click orange cloud to turn GRAY. Gray = DNS only.</div></div>
                                     <div class="troubleshoot-item"><h4>❌ SSL mode "Flexible"</h4><p>Causes redirect loops.</p><div class="troubleshoot-solution">✅ Change to "Full" or "Full (strict)".</div></div>
                                     <div class="troubleshoot-item"><h4>❌ Caching old content</h4><p>Changes not showing.</p><div class="troubleshoot-solution">✅ Caching → Purge Everything.</div></div>
+                                </div>
+                                <div id="troubleshoot-shopify" class="category-content">
+                                    <div class="troubleshoot-category-title">🛒 Shopify Issues</div>
+                                    <div class="troubleshoot-item"><h4>❌ Can't find subdomain settings</h4><p>Option missing in Shopify admin.</p><div class="troubleshoot-solution">✅ Settings → Domains → Click domain → Scroll to "Subdomains" section. If missing, domain may be managed externally.</div></div>
+                                    <div class="troubleshoot-item"><h4>❌ Domain managed by third-party</h4><p>Bought domain outside Shopify but connected it.</p><div class="troubleshoot-solution">✅ DNS is at original registrar (GoDaddy, Namecheap, etc). Add CNAME there, not in Shopify.</div></div>
+                                    <div class="troubleshoot-item"><h4>❌ "External website" option missing</h4><p>Older Shopify plan or settings.</p><div class="troubleshoot-solution">✅ Upgrade plan or contact Shopify support. Alternative: manage DNS at domain registrar directly.</div></div>
+                                    <div class="troubleshoot-item"><h4>❌ Want root domain for landing page</h4><p>Client wants example.com, not promo.example.com</p><div class="troubleshoot-solution">✅ Not possible while Shopify active. Options: use subdomain, temporarily disconnect Shopify, or host landing page as Shopify page.</div></div>
+                                    <div class="troubleshoot-item"><h4>❌ Subdomain shows Shopify 404</h4><p>Subdomain pointing to Shopify instead of external.</p><div class="troubleshoot-solution">✅ Delete subdomain in Shopify, add fresh with "External website" option. Or add CNAME at registrar if domain is external.</div></div>
+                                    <div class="troubleshoot-item"><h4>❌ SSL not working on subdomain</h4><p>Certificate error on the new subdomain.</p><div class="troubleshoot-solution">✅ Shopify doesn't issue SSL for external subdomains. SSL comes from your hosting (Netlify/Cloudflare). Verify DNS in hosting dashboard.</div></div>
                                 </div>
                                 <div id="troubleshoot-business" class="category-content">
                                     <div class="troubleshoot-category-title">🏢 Business Blockers</div>
